@@ -1,23 +1,23 @@
 #!/bin/bash
 
-if [[ "$GITOPS_BRANCH" == "control-plane-dev" ]]; then
+if [[ "$GITOPS_BRANCH" == "development" ]]; then
     printf "\033[0;36m================================================================================================================> Condition 1: Develop environment \033[0m\n"
-    printf "\033[0;32m============> Cloning $5 - Branch: control-plane-dev \033[0m\n"
-    git clone https://$4@$6 -b control-plane-dev
+    printf "\033[0;32m============> Cloning $5 - Branch: development \033[0m\n"
+    git clone https://$4@$6 -b development
     cd $5
     git config --local user.email "action@github.com"
     git config --local user.name "GitHub Action"
     echo "Repo $5 cloned!!!"
 
-    printf "\033[0;32m============> Control plane dev branch Kustomize step - control-plane-dev Overlay \033[0m\n"
-    cd k8s/$1/overlays/control-plane-dev
+    printf "\033[0;32m============> Control plane dev branch Kustomize step - development Overlay \033[0m\n"
+    cd k8s/$1/overlays/development
     kustomize edit set image IMAGE=$2/$1:$RELEASE_VERSION
     echo "Done!!"
 
-    printf "\033[0;32m============> Git push: Branch control-plane-dev \033[0m\n"
+    printf "\033[0;32m============> Git push: Branch development \033[0m\n"
     cd ../..
     git commit -am "$3 has Built a new version: $RELEASE_VERSION"
-    git push origin control-plane-dev
+    git push origin development
 
 elif [[ "$GITOPS_BRANCH" == "main" ]]; then
     printf "\033[0;36m================================================================================================================> Condition 3: New release (HML and PRD environment) \033[0m\n"
